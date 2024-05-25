@@ -12,6 +12,6 @@
   }
 
   #root {
-    @apply flex select-none bg-gray-2/80;
+    @apply flex select-none bg-gray-2/80 cursor-default;
   }
 }
