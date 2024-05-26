@@ -4,7 +4,10 @@
 
 @layer base {
   :root {
+    @apply antialiased;
     color-scheme: dark;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
   }
 
   html, body {

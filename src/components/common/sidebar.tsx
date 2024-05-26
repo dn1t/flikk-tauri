@@ -1,7 +1,35 @@
+import { A, useLocation } from '@solidjs/router';
+import { createMemo, type ParentProps } from 'solid-js';
+import { cn } from '../../utils';
 import { ChzzkIcon } from '../icons/chzzk';
+import { PhosphorIcon, type PhosphorIconName } from '../icons/phosphor';
 import { SOOPIcon } from '../icons/soop';
 import { TwitchIcon } from '../icons/twitch';
 import { Input } from './input';
+
+function Category(
+  props: ParentProps<{ href: string; icon: PhosphorIconName }>,
+) {
+  const loc = useLocation();
+  const selected = createMemo(() =>
+    props.href === '/'
+      ? loc.pathname === '/'
+      : loc.pathname.startsWith(props.href),
+  );
+
+  return (
+    <A
+      href={props.href}
+      class={cn(
+        'flex items-center w-full px-3 py-2 border border-transparent rounded-[7px]',
+        selected() && 'bg-gray-8/20 border-gray-8/30',
+      )}
+    >
+      <PhosphorIcon icon={props.icon} class='text-orange-9' />
+      <span class='ml-2 text-sm leading-none'>{props.children}</span>
+    </A>
+  );
+}
 
 export function Sidebar() {
   return (
@@ -19,9 +47,20 @@ export function Sidebar() {
       </div>
       <div class='flex flex-col px-4'>
         <Input placeholder='검색' />
+        <div class='flex flex-col mt-4'>
+          <Category href='/' icon='house'>
+            홈
+          </Category>
+          <Category href='/vod' icon='video'>
+            VOD
+          </Category>
+          <Category href='/categories' icon='squares-four'>
+            카테고리
+          </Category>
+        </div>
       </div>
       <div class='px-4 mt-auto mb-3'>
-        <div class='flex flex-col gap-y-2 bg-gray-8/30 p-2.5 border border-gray-8/30 rounded-[7px]'>
+        <div class='flex flex-col gap-y-2 bg-gray-8/20 p-2.5 border border-gray-8/30 rounded-[7px]'>
           <div class='flex items-center gap-x-1.5'>
             <div class='flex items-center justify-center w-5 h-5 bg-black rounded-md'>
               <ChzzkIcon class='h-3.5' />
