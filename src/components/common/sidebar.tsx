@@ -1,3 +1,5 @@
+import { Input } from './input';
+
 export function Sidebar() {
   return (
     <section class='w-60 h-screen'>
@@ -12,7 +14,9 @@ export function Sidebar() {
         />
         <h1 class='font-semibold text-2xl pointer-events-none'>Flikk</h1>
       </div>
-      <div class='flex flex-col px-4'></div>
+      <div class='flex flex-col px-4'>
+        <Input placeholder='검색' />
+      </div>
     </section>
   );
 }
