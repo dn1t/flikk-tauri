@@ -1,9 +1,10 @@
 import { Route, Router } from '@solidjs/router';
 import type { ParentProps } from 'solid-js';
 import { Sidebar } from './components/common/sidebar';
+import { FlikkProvider } from './context';
 import Categories from './routes/categories';
 import Home from './routes/home';
-import Videos from './routes/videos';
+import VOD from './routes/vod';
 
 function Layout(props: ParentProps) {
   return (
@@ -18,12 +19,12 @@ function Layout(props: ParentProps) {
 
 export default function App() {
   return (
-    <>
+    <FlikkProvider>
       <Router root={Layout}>
         <Route path='/' component={Home} />
-        <Route path='/videos' component={Videos} />
+        <Route path='/vod' component={VOD} />
         <Route path='/categories' component={Categories} />
       </Router>
-    </>
+    </FlikkProvider>
   );
 }

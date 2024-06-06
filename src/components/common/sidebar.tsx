@@ -1,37 +1,22 @@
-import { A, useLocation } from '@solidjs/router';
-import { createMemo, type ParentProps } from 'solid-js';
-import { cn } from '../../utils';
+import { createSignal } from 'solid-js';
+import { useFlikk } from '../../context';
 import { ChzzkIcon } from '../icons/chzzk';
-import { PhosphorIcon, type PhosphorIconName } from '../icons/phosphor';
 import { SOOPIcon } from '../icons/soop';
 import { TwitchIcon } from '../icons/twitch';
+import { Category } from '../sidebar/category';
+import { Login, currentPageSignal } from '../sidebar/login';
 import { Input } from './input';
 
-function Category(
-  props: ParentProps<{ href: string; icon: PhosphorIconName }>,
-) {
-  const loc = useLocation();
-  const selected = createMemo(() =>
-    props.href === '/'
-      ? loc.pathname === '/'
-      : loc.pathname.startsWith(props.href),
-  );
-
-  return (
-    <A
-      href={props.href}
-      class={cn(
-        'flex items-center w-full px-3 py-2 border border-transparent rounded-[7px]',
-        selected() && 'bg-gray-8/20 border-gray-8/30',
-      )}
-    >
-      <PhosphorIcon icon={props.icon} class='text-orange-9' />
-      <span class='ml-2 text-sm leading-none'>{props.children}</span>
-    </A>
-  );
-}
-
 export function Sidebar() {
+  const { logon } = useFlikk();
+  const [open, setOpen] = createSignal(false);
+  const [, setCurrentPage] = currentPageSignal;
+
+  function openLoginPage(platform: 'chzzk' | 'soop' | 'twitch') {
+    setCurrentPage(platform);
+    setOpen(true);
+  }
+
   return (
     <section class='flex flex-col w-60 h-screen'>
       <div
@@ -65,22 +50,50 @@ export function Sidebar() {
             <div class='flex items-center justify-center w-5 h-5 bg-black rounded-md'>
               <ChzzkIcon class='h-3.5' />
             </div>
-            <span class='text-sm'>CHZZK</span>
+            {logon.chzzk && <span class='text-sm'>{logon.chzzk}</span>}
+            {!logon.chzzk && (
+              <button
+                type='button'
+                class='text-sm text-gray-11 hover:text-orange-10'
+                onClick={() => openLoginPage('chzzk')}
+              >
+                연결하기
+              </button>
+            )}
           </div>
           <div class='flex items-center gap-x-1.5'>
             <div class='flex items-center justify-center w-5 h-5 bg-blue-12 rounded-md'>
               <SOOPIcon class='h-4' />
             </div>
-            <span class='text-sm'>SOOP</span>
+            {logon.soop && <span class='text-sm'>{logon.soop}</span>}
+            {!logon.soop && (
+              <button
+                type='button'
+                class='text-sm text-gray-11 hover:text-orange-10'
+                onClick={() => openLoginPage('soop')}
+              >
+                연결하기
+              </button>
+            )}
           </div>
           <div class='flex items-center gap-x-1.5'>
             <div class='flex items-center justify-center w-5 h-5 bg-purple-12 rounded-md'>
               <TwitchIcon class='h-[18px]' />
             </div>
-            <span class='text-sm'>TWITCH</span>
+            {logon.twitch && <span class='text-sm'>{logon.twitch}</span>}
+            {!logon.twitch && (
+              <button
+                type='button'
+                class='text-sm text-gray-11 hover:text-orange-10'
+                onClick={() => openLoginPage('twitch')}
+              >
+                연결하기
+              </button>
+            )}
           </div>
         </div>
       </div>
+      <Login open={open()} onClose={() => setOpen(false)} />
     </section>
   );
 }

@@ -22,5 +22,9 @@ export default {
       },
     },
   },
-  plugins: [require('./src/radix-colors')],
+  plugins: [
+    require('./src/radix-colors'),
+    require('tailwindcss-animate'),
+    require('@corvu/tailwind'),
+  ],
 };
