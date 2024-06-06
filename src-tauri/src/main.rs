@@ -1,6 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-// use tauri::generate_handler;
+use std::str::FromStr;
+
+use rsa::{pkcs1::EncodeRsaPublicKey, BigUint, RsaPublicKey};
+use tauri::generate_handler;
 
 mod login_handler;
 
@@ -17,6 +20,7 @@ mod mac;
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_shell::init())
         // .plugin(login_handler::init())
         .setup(|app| {
@@ -30,9 +34,6 @@ fn main() {
 
             Ok(())
         })
-        // .invoke_handler(generate_handler![
-        //     crate::login_handler::return_chzzk_cookies
-        // ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

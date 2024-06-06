@@ -19,6 +19,15 @@
     "window:allow-set-size",
     "window:allow-set-focus",
     "window:allow-start-dragging",
-    "webview:allow-create-webview-window"
+    "webview:allow-create-webview-window",
+    {
+      "identifier": "http:default",
+      "allow": [
+        { "url": "https://nid.naver.com" },
+        { "url": "https://chzzk.naver.com" },
+        { "url": "https://member.afreecatv.com" },
+        { "url": "https://passport.twitch.tv" }
+      ]
+    }
   ]
 }

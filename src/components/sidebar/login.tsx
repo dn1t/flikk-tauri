@@ -1,8 +1,9 @@
 /* @refresh reload */
 import Dialog from '@corvu/dialog';
-import { createMemo, createSignal, type JSX } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX } from 'solid-js';
 import { Button } from '../common/button';
 import { Input } from '../common/input';
+import { ChzzkLogin } from '../../lib/chzzk-login';
 
 export const currentPageSignal = createSignal<'chzzk' | 'soop' | 'twitch'>();
 
@@ -17,6 +18,20 @@ export function Login(props: { open: boolean; onClose: () => void }) {
         return '숲';
       case 'twitch':
         return '트위치';
+    }
+  });
+
+  const loginInstance = createMemo(() => {
+    switch (currentPage()) {
+      case 'chzzk': {
+        const instance = new ChzzkLogin();
+        instance.getKeys();
+        return instance;
+      }
+      case 'soop':
+        return;
+      case 'twitch':
+        return;
     }
   });
 
@@ -37,10 +52,11 @@ export function Login(props: { open: boolean; onClose: () => void }) {
               e.stopPropagation();
 
               const formData = new FormData(e.currentTarget);
-              const userId = formData.get('userId')!;
-              const password = formData.get('password')!;
+              const userId = formData.get('userId')! as string;
+              const password = formData.get('password')! as string;
 
               console.log(userId, password);
+              loginInstance()?.login(userId, password);
             }) satisfies JSX.EventHandler<HTMLFormElement, SubmitEvent>
           }
         >
