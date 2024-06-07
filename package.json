@@ -6,7 +6,8 @@
     "dev": "tauri dev",
     "dev:vite": "vite",
     "build:vite": "vite build",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "check": "biome check ./src"
   },
   "license": "MIT",
   "dependencies": {
@@ -15,14 +16,17 @@
     "@phosphor-icons/web": "^2.1.1",
     "@solidjs/router": "^0.13.3",
     "@tauri-apps/api": ">=2.0.0-beta.12",
+    "@tauri-apps/plugin-fs": "^2.0.0-beta.5",
     "@tauri-apps/plugin-http": "^2.0.0-beta.5",
     "@tauri-apps/plugin-shell": ">=2.0.0-beta.4",
     "asn1": "^0.2.6",
     "clsx": "^2.1.1",
+    "fetch-cookie": "^3.0.1",
     "js-crypto-rsa": "^1.0.7",
     "lz-string": "^1.5.0",
     "solid-js": "^1.8.17",
     "tailwind-merge": "^2.3.0",
+    "tough-cookie": "^4.1.4",
     "zod": "^3.23.8",
     "zod-form-data": "^2.0.2"
   },

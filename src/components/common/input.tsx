@@ -22,7 +22,7 @@ export function Input(
       <input
         {...props}
         class={cn(
-          'px-[11px] pt-0 pb-1.5 bg-transparent outline-none',
+          'px-[11px] pt-0 pb-1.5 bg-transparent outline-none appearance-none',
           !props.label && 'pt-1.5',
           props.class,
         )}

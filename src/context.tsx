@@ -1,27 +1,56 @@
-import { createContext, useContext, type ParentProps } from 'solid-js';
+import {
+  createContext,
+  createEffect,
+  useContext,
+  type ParentProps,
+} from 'solid-js';
 import { createStore } from 'solid-js/store';
+import { Chzzk, updateChzzkContext } from './lib/chzzk';
 
-interface Flikk {
-  logon: {
-    chzzk: string | null;
-    soop: string | null;
-    twitch: string | null;
+export type Logon = string | null;
+export type SetLogon = (logon: Logon) => void;
+
+export interface Flikk {
+  instances: {
+    chzzk: Chzzk;
+    soop: null;
+    twitch: null;
   };
+  logon: { chzzk: Logon; soop: Logon; twitch: Logon };
   actions: {
-    setChzzkLogon: (logon: string | null) => void;
-    setSoopLogon: (logon: string | null) => void;
-    setTwitchLogon: (logon: string | null) => void;
+    instances: {
+      setChzzkInstance: (instance: Chzzk) => void;
+      setSoopInstance: (instance: null) => void;
+      setTwitchInstance: (instance: null) => void;
+    };
+    logon: {
+      setChzzkLogon: SetLogon;
+      setSoopLogon: SetLogon;
+      setTwitchLogon: SetLogon;
+    };
   };
 }
 
 const FlikkContext = createContext<Flikk>({} as Flikk);
 
 export function FlikkProvider(props: ParentProps) {
+  const [instances, setInstances] = createStore<Flikk['instances']>({
+    chzzk: new Chzzk(),
+    soop: null,
+    twitch: null,
+  });
   const [logon, setLogon] = createStore<Flikk['logon']>({
     chzzk: null,
     soop: null,
     twitch: null,
   });
+
+  const setChzzkInstance = (instance: Chzzk) =>
+    setInstances('chzzk', () => instance);
+  const setSoopInstance = (instance: null) =>
+    setInstances('soop', () => instance);
+  const setTwitchInstance = (instance: null) =>
+    setInstances('twitch', () => instance);
 
   const setChzzkLogon = (logon: string | null) =>
     setLogon('chzzk', () => logon);
@@ -30,9 +59,17 @@ export function FlikkProvider(props: ParentProps) {
     setLogon('twitch', () => logon);
 
   const value = {
+    instances,
     logon,
-    actions: { setChzzkLogon, setSoopLogon, setTwitchLogon },
+    actions: {
+      instances: { setChzzkInstance, setSoopInstance, setTwitchInstance },
+      logon: { setChzzkLogon, setSoopLogon, setTwitchLogon },
+    },
   };
+
+  createEffect(() => {
+    updateChzzkContext(instances.chzzk, setChzzkLogon);
+  });
 
   return (
     <FlikkContext.Provider value={value}>

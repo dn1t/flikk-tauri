@@ -24,10 +24,25 @@
       "identifier": "http:default",
       "allow": [
         { "url": "https://nid.naver.com" },
+        { "url": "https://cc.naver.com" },
+        { "url": "https://*.game.naver.com" },
         { "url": "https://chzzk.naver.com" },
         { "url": "https://member.afreecatv.com" },
         { "url": "https://passport.twitch.tv" }
       ]
+    },
+    "fs:default",
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "$APPDATA/*" }]
+    },
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [{ "path": "$APPDATA/*" }]
+    },
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [{ "path": "$APPDATA/*" }]
     }
   ]
 }

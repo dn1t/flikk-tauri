@@ -406,13 +406,41 @@ dependencies = [
 ]
 
 [[package]]
+name = "cookie"
+version = "0.18.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ddef33a339a91ea89fb53151bd0a4689cfce27055c291dfa69945475d22c747"
+dependencies = [
+ "percent-encoding",
+ "time",
+ "version_check",
+]
+
+[[package]]
 name = "cookie_store"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "387461abbc748185c3a6e1673d826918b450b87ff22639429c694619a83b6cf6"
 dependencies = [
- "cookie",
+ "cookie 0.17.0",
  "idna 0.3.0",
+ "log",
+ "publicsuffix",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "time",
+ "url",
+]
+
+[[package]]
+name = "cookie_store"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4934e6b7e8419148b6ef56950d277af8561060b56afd59e2aadf98b59fce6baa"
+dependencies = [
+ "cookie 0.18.1",
+ "idna 0.5.0",
  "log",
  "publicsuffix",
  "serde",
@@ -819,6 +847,7 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-build",
+ "tauri-plugin-fs",
  "tauri-plugin-http",
  "tauri-plugin-shell",
  "window-vibrancy",
@@ -2738,8 +2767,8 @@ checksum = "566cafdd92868e0939d3fb961bd0dc25fcfaaed179291093b3d43e6b3150ea10"
 dependencies = [
  "base64 0.22.1",
  "bytes",
- "cookie",
- "cookie_store",
+ "cookie 0.17.0",
+ "cookie_store 0.20.0",
  "encoding_rs",
  "futures-core",
  "futures-util",
@@ -2776,6 +2805,18 @@ dependencies = [
  "web-sys",
  "webpki-roots",
  "winreg",
+]
+
+[[package]]
+name = "reqwest_cookie_store"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a0b36498c7452f11b1833900f31fbb01fc46be20992a50269c88cf59d79f54e9"
+dependencies = [
+ "bytes",
+ "cookie_store 0.21.0",
+ "reqwest",
+ "url",
 ]
 
 [[package]]
@@ -3556,8 +3597,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.0.0-beta.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3aa91955751f329e0aa431b87c199b7378b6f91ec0765d2ad9d4c64e017c3cda"
+source = "git+https://github.com/dn1t/plugins-workspace?rev=a0f6c4eb#a0f6c4ebcb6a384926e43a8424ea770bc62cd50e"
 dependencies = [
  "anyhow",
  "glob",
@@ -3575,13 +3615,13 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-http"
 version = "2.0.0-beta.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d5b9dc82eedca8daabeaa779be7e3a74dc1c07ab2339cbc071f3997a3b1b544"
+source = "git+https://github.com/dn1t/plugins-workspace?rev=a0f6c4eb#a0f6c4ebcb6a384926e43a8424ea770bc62cd50e"
 dependencies = [
  "data-url",
  "http",
  "regex",
  "reqwest",
+ "reqwest_cookie_store",
  "schemars",
  "serde",
  "serde_json",

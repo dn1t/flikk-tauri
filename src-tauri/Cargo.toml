@@ -15,5 +15,8 @@ objc = "0.2.7"
 cocoa = "0.25.0"
 window-vibrancy = "0.5.0"
 serde_json = "1.0.117"
-tauri-plugin-http = "2.0.0-beta.9"
 rsa = "0.9.6"
+tauri-plugin-fs = { git = "https://github.com/dn1t/plugins-workspace", rev = "a0f6c4eb" }
+tauri-plugin-http = { git = "https://github.com/dn1t/plugins-workspace", rev = "a0f6c4eb", features = [
+  "cookies",
+] }
