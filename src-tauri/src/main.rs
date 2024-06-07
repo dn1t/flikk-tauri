@@ -1,7 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod login_handler;
-
 #[cfg(target_os = "macos")]
 #[macro_use]
 extern crate cocoa;

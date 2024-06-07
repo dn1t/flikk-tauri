@@ -26,8 +26,12 @@
         { "url": "https://nid.naver.com" },
         { "url": "https://cc.naver.com" },
         { "url": "https://*.game.naver.com" },
-        { "url": "https://chzzk.naver.com" },
+        { "url": "https://*.chzzk.naver.com" },
         { "url": "https://member.afreecatv.com" },
+        { "url": "https://live.afreecatv.com" },
+        { "url": "https://bj.afreecatv.com" },
+        { "url": "https://vod.afreecatv.com" },
+        { "url": "https://play.afreecatv.com" },
         { "url": "https://passport.twitch.tv" }
       ]
     },

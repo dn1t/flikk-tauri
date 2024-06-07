@@ -1,6 +1,6 @@
 import { fetch } from '@tauri-apps/plugin-http';
 import type { SetLogon } from '../context';
-import type { Result } from './types';
+import type { ChzzkLive, Result } from './types';
 
 const USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
@@ -67,6 +67,60 @@ export class Chzzk {
         nickname: data.content.nickname,
         profileImage: data.content.profileImageUrl,
         verified: data.content.verifiedMark,
+      },
+    };
+  }
+
+  async getLives(options?: { viewers: number; liveId: number }): Promise<
+    Result<{
+      lives: ChzzkLive[];
+      next: { viewers: number; liveId: number } | null;
+    }>
+  > {
+    const res = await fetch(
+      `https://api.chzzk.naver.com/service/v1/lives?size=50&sortType=POPULAR${
+        options
+          ? `&concurrentUserCount=${options.viewers}&liveId=${options.liveId}`
+          : ''
+      }`,
+      { headers: { 'User-Agent': USER_AGENT } },
+    );
+    if (!res.ok) return { success: false };
+    const data = await res.json();
+    if (data.code !== 200 || !data.content) return { success: false };
+
+    return {
+      success: true,
+      data: {
+        lives: data.content.data.map(
+          // biome-ignore lint/suspicious/noExplicitAny:
+          (data: any) =>
+            ({
+              platform: 'chzzk',
+              viewers: data.concurrentUserCount,
+              channel: {
+                id: data.channel.channelId,
+                profileImage: data.channel.channelImageUrl,
+                name: data.channel.channelName,
+                verified: data.channel.verifiedMark,
+              },
+              title: data.liveTitle
+                .replaceAll('&lt;', '<')
+                .replaceAll('&gt;', '>'),
+              thumbnail: data.liveImageUrl?.replace('{type}', '480') ?? null,
+              adult: data.adult,
+              categoryType: data.categoryType,
+              category: data.liveCategory,
+              categoryLabel: data.liveCategoryValue,
+              tags: data.tags,
+            }) satisfies ChzzkLive,
+        ),
+        next: data.content.page
+          ? {
+              viewers: data.content.page.next.concurrentUserCount,
+              liveId: data.content.page.next.liveId,
+            }
+          : null,
       },
     };
   }

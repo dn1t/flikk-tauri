@@ -6,6 +6,7 @@ import {
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { Chzzk, updateChzzkContext } from './lib/chzzk';
+import { SOOP } from './lib/soop';
 
 export type Logon = string | null;
 export type SetLogon = (logon: Logon) => void;
@@ -13,14 +14,14 @@ export type SetLogon = (logon: Logon) => void;
 export interface Flikk {
   instances: {
     chzzk: Chzzk;
-    soop: null;
+    soop: SOOP;
     twitch: null;
   };
   logon: { chzzk: Logon; soop: Logon; twitch: Logon };
   actions: {
     instances: {
       setChzzkInstance: (instance: Chzzk) => void;
-      setSoopInstance: (instance: null) => void;
+      setSoopInstance: (instance: SOOP) => void;
       setTwitchInstance: (instance: null) => void;
     };
     logon: {
@@ -36,7 +37,7 @@ const FlikkContext = createContext<Flikk>({} as Flikk);
 export function FlikkProvider(props: ParentProps) {
   const [instances, setInstances] = createStore<Flikk['instances']>({
     chzzk: new Chzzk(),
-    soop: null,
+    soop: new SOOP(),
     twitch: null,
   });
   const [logon, setLogon] = createStore<Flikk['logon']>({
@@ -47,7 +48,7 @@ export function FlikkProvider(props: ParentProps) {
 
   const setChzzkInstance = (instance: Chzzk) =>
     setInstances('chzzk', () => instance);
-  const setSoopInstance = (instance: null) =>
+  const setSoopInstance = (instance: SOOP) =>
     setInstances('soop', () => instance);
   const setTwitchInstance = (instance: null) =>
     setInstances('twitch', () => instance);

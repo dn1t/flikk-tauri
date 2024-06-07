@@ -1,10 +1,8 @@
 import { createSignal } from 'solid-js';
 import { useFlikk } from '../../context';
-import { ChzzkIcon } from '../icons/chzzk';
-import { SOOPIcon } from '../icons/soop';
-import { TwitchIcon } from '../icons/twitch';
 import { Category } from '../sidebar/category';
 import { Login, currentPageSignal } from '../sidebar/login';
+import { ChzzkBadge, SOOPBadge, TwitchBadge } from './badges';
 import { Input } from './input';
 
 export function Sidebar() {
@@ -47,9 +45,7 @@ export function Sidebar() {
       <div class='px-4 mt-auto mb-3'>
         <div class='flex flex-col gap-y-2 bg-gray-8/20 p-2.5 border border-gray-8/30 rounded-[7px]'>
           <div class='flex items-center gap-x-1.5'>
-            <div class='flex items-center justify-center w-5 h-5 bg-black rounded-md'>
-              <ChzzkIcon class='h-3.5' />
-            </div>
+            <ChzzkBadge />
             {logon.chzzk && <span class='text-sm'>{logon.chzzk}</span>}
             {!logon.chzzk && (
               <button
@@ -62,9 +58,7 @@ export function Sidebar() {
             )}
           </div>
           <div class='flex items-center gap-x-1.5'>
-            <div class='flex items-center justify-center w-5 h-5 bg-blue-12 rounded-md'>
-              <SOOPIcon class='h-4' />
-            </div>
+            <SOOPBadge />
             {logon.soop && <span class='text-sm'>{logon.soop}</span>}
             {!logon.soop && (
               <button
@@ -77,9 +71,7 @@ export function Sidebar() {
             )}
           </div>
           <div class='flex items-center gap-x-1.5'>
-            <div class='flex items-center justify-center w-5 h-5 bg-purple-12 rounded-md'>
-              <TwitchIcon class='h-[18px]' />
-            </div>
+            <TwitchBadge />
             {logon.twitch && <span class='text-sm'>{logon.twitch}</span>}
             {!logon.twitch && (
               <button
