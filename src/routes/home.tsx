@@ -18,7 +18,9 @@ export default function Home() {
       return Math.ceil(lives().length / 3);
     },
     getScrollElement: () => listRef,
-    estimateSize: () => 305,
+    get estimateSize() {
+      return () => ((listRef.clientWidth - 104) * 3) / 16 + 146;
+    },
     overscan: 5,
   });
 

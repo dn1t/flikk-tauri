@@ -2,6 +2,7 @@ import type { VirtualItem } from '@tanstack/solid-virtual';
 import { For } from 'solid-js';
 import type { Live } from '../../lib/types.d';
 import { ChzzkBadge, SOOPBadge } from '../common/badges';
+import { A } from '@solidjs/router';
 
 export function LiveCard(props: {
   item: VirtualItem;
@@ -17,8 +18,16 @@ export function LiveCard(props: {
         }px)) translateY(${props.item.start}px)`,
       }}
     >
-      {props.live.thumbnail ? (
-        <>
+      <A
+        href={`/player/${props.live.platform}/${
+          props.live.platform === 'chzzk'
+            ? props.live.channel.id
+            : props.live.platform === 'soop'
+              ? `${props.live.channel.id}:${props.live.id}`
+              : ''
+        }`}
+      >
+        {props.live.thumbnail ? (
           <div
             class='flex items-end gap-x-1 aspect-video px-[5px] py-1 bg-gray-2 bg-cover bg-no-repeat bg-center border border-gray-4 rounded-xl'
             style={{ 'background-image': `url(${props.live.thumbnail})` }}
@@ -30,23 +39,23 @@ export function LiveCard(props: {
               </div>
             </div>
           </div>
-        </>
-      ) : props.live.adult ? (
-        <div class='flex flex-col items-center justify-center aspect-video bg-gray-2 border border-gray-4 rounded-xl'>
-          <div class='flex items-center justify-center w-[52px] aspect-square bg-gray-3 border-4 border-gray-5 rounded-full'>
-            <span class='font-medium text-gray-11 text-2xl leading-none'>
-              19
+        ) : props.live.adult ? (
+          <div class='flex flex-col items-center justify-center aspect-video bg-gray-2 border border-gray-4 rounded-xl'>
+            <div class='flex items-center justify-center w-[52px] aspect-square bg-gray-3 border-4 border-gray-5 rounded-full'>
+              <span class='font-medium text-gray-11 text-2xl leading-none'>
+                19
+              </span>
+            </div>
+            <span class='mt-1.5 font-semibold text-gray-10 text-lg'>
+              연령 제한
             </span>
           </div>
-          <span class='mt-1.5 font-semibold text-gray-10 text-lg'>
-            연령 제한
-          </span>
-        </div>
-      ) : (
-        <div class='flex flex-col items-center justify-center aspect-video bg-gray-2 border border-gray-4 rounded-xl'>
-          <span class='font-medium text-gray-10 text-lg'>이미지 없음</span>
-        </div>
-      )}
+        ) : (
+          <div class='flex flex-col items-center justify-center aspect-video bg-gray-2 border border-gray-4 rounded-xl'>
+            <span class='font-medium text-gray-10 text-lg'>이미지 없음</span>
+          </div>
+        )}
+      </A>
       <div class='flex gap-x-2 mt-2.5'>
         <div
           class='flex-shrink-0 w-10 h-10 bg-cover bg-no-repeat bg-center border border-gray-4 rounded-full'
@@ -61,9 +70,18 @@ export function LiveCard(props: {
           }}
         />
         <div>
-          <div class='mt-0.5 font-medium hover:text-orange-10 leading-5 line-clamp-2 cursor-pointer'>
+          <A
+            href={`/player/${props.live.platform}/${
+              props.live.platform === 'chzzk'
+                ? props.live.channel.id
+                : props.live.platform === 'soop'
+                  ? `${props.live.channel.id}:${props.live.id}`
+                  : ''
+            }`}
+            class='mt-0.5 font-medium hover:text-orange-10 leading-5 line-clamp-2 cursor-pointer'
+          >
             {props.live.title}
-          </div>
+          </A>
           <div class='mt-1 font-medium text-[15px] text-gray-11 leading-[14px]'>
             {props.live.channel.name}
           </div>

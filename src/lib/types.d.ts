@@ -34,10 +34,23 @@ export type ChzzkLive = BaseLive & {
   categoryLabel: string;
 };
 
+export type ChzzkLiveDetails = ChzzkLive & {
+  m3u8: string;
+  chatId: string;
+  streamStarted: Date;
+};
+
 export type SOOPLive = BaseLive & {
   platform: 'soop';
+  id: string;
   categories: string[];
   allowVisit: boolean;
 };
 
 export type Live = ChzzkLive | SOOPLive;
+
+export type LiveDetails = Live & {
+  m3u8: string;
+  chatId: string;
+  streamStarted: Date;
+};

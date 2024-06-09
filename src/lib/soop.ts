@@ -100,6 +100,7 @@ export class SOOP {
                 )}/${data.user_id}/m/${data.user_id}.webp`,
                 name: data.user_nick,
               },
+              id: data.broad_no,
               title: data.broad_title
                 .replaceAll('&lt;', '<')
                 .replaceAll('&gt;', '>'),

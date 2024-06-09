@@ -4,6 +4,7 @@ import { Sidebar } from './components/common/sidebar';
 import { FlikkProvider } from './context';
 import Categories from './routes/categories';
 import Home from './routes/home';
+import Player from './routes/player';
 import VOD from './routes/vod';
 
 function Layout(props: ParentProps) {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path='/' component={Home} />
         <Route path='/vod' component={VOD} />
         <Route path='/categories' component={Categories} />
+        <Route path='/player/:platform/:id' component={Player} />
       </Router>
     </FlikkProvider>
   );

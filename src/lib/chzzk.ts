@@ -1,9 +1,21 @@
 import { fetch } from '@tauri-apps/plugin-http';
 import type { SetLogon } from '../context';
-import type { ChzzkLive, Result } from './types';
+import type { ChzzkLive, ChzzkLiveDetails, Result } from './types.d';
 
 const USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
+const CHAT_SERVERS = [
+  'kr-ss1.chat.naver.com',
+  'kr-ss2.chat.naver.com',
+  'kr-ss3.chat.naver.com',
+  'kr-ss4.chat.naver.com',
+  'kr-ss5.chat.naver.com',
+  'kr-ss6.chat.naver.com',
+  'kr-ss7.chat.naver.com',
+  'kr-ss8.chat.naver.com',
+  'kr-ss9.chat.naver.com',
+  'kr-ss10.chat.naver.com',
+];
 
 export class Chzzk {
   async login(key: string): Promise<Result> {
@@ -123,6 +135,89 @@ export class Chzzk {
           : null,
       },
     };
+  }
+
+  async getLiveDetails(channelId: string): Promise<Result<ChzzkLiveDetails>> {
+    const res = await fetch(
+      `https://api.chzzk.naver.com/service/v2/channels/${channelId}/live-detail`,
+      { headers: { 'User-Agent': USER_AGENT } },
+    );
+    if (!res.ok) return { success: false };
+    const data = await res.json();
+    if (data.code !== 200 || !data.content) return { success: false };
+
+    return {
+      success: true,
+      data: {
+        platform: 'chzzk',
+        viewers: data.content.concurrentUserCount,
+        channel: {
+          id: data.content.channel.channelId,
+          profileImage: data.content.channel.channelImageUrl,
+          name: data.content.channel.channelName,
+          verified: data.content.channel.verifiedMark,
+        },
+        title: data.content.liveTitle
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>'),
+        thumbnail: data.content.liveImageUrl?.replace('{type}', '480') ?? null,
+        adult: data.content.adult,
+        categoryType: data.content.categoryType,
+        category: data.content.liveCategory,
+        categoryLabel: data.content.liveCategoryValue,
+        tags: data.content.tags,
+        streamStarted: new Date(data.content.openDate),
+        m3u8: JSON.parse(data.content.livePlaybackJson).media.find(
+          (m: { mediaId: 'HLS' | 'LLHLS' }) => m.mediaId === 'LLHLS',
+        ).path,
+        chatId: data.content.chatChannelId,
+      },
+    };
+  }
+
+  async getFollowing(
+    channelId: string,
+  ): Promise<Result<{ following: boolean }>> {
+    const res = await fetch(
+      `https://api.chzzk.naver.com/service/v1/channels/${channelId}/my-info`,
+      { headers: { 'User-Agent': USER_AGENT } },
+    );
+    if (!res.ok) return { success: false };
+    const data = await res.json();
+    if (data.code !== 200 || !data.content) return { success: false };
+
+    return {
+      success: true,
+      data: { following: data.content.following.following },
+    };
+  }
+
+  async connectLiveChat(chatId: string) {
+    const ws = new WebSocket(
+      `https://${
+        CHAT_SERVERS[Math.floor(Math.random() * CHAT_SERVERS.length)]
+      }/chat`,
+      ['wss'],
+    );
+    ws.addEventListener('open', () => {
+      ws.send(
+        JSON.stringify({
+          ver: '2',
+          cmd: 100,
+          svcid: 'game',
+          cid: chatId,
+          bdy: {
+            uid: 'e007cbf20d0bacfbc0e454913596ae6e',
+            devType: 2001,
+            accTkn:
+              'imJWuWK0yDQeji+n6EqkhSJ8kEfSiliTQpDM6zUqi3aBD4xNP+kw0nEAiNzqp4GWlUKQWzr6M4cZO/cJmeUlXQ==',
+            auth: 'SEND',
+          },
+          tid: 1,
+        }),
+      );
+    });
+    return ws;
   }
 }
 

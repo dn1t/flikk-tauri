@@ -23,6 +23,7 @@
     "asn1": "^0.2.6",
     "clsx": "^2.1.1",
     "fetch-cookie": "^3.0.1",
+    "hls.js": "^1.5.11",
     "js-crypto-rsa": "^1.0.7",
     "lz-string": "^1.5.0",
     "solid-custom-scrollbars": "^0.1.7",
